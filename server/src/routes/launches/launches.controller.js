@@ -7,12 +7,7 @@ function httpGetAllLaunches(_, res) {
 function httpAddNewLaunch(req, res) {
   const launch = req.body;
 
-  if (
-    !launch.mission ||
-    !launch.rocket ||
-    !launch.destination ||
-    !launch.launchDate
-  )
+  if (!launch.mission || !launch.rocket || !launch.target || !launch.launchDate)
     return res.status(400).json({
       error: 'Bad Request! Check the response body',
     });
@@ -24,8 +19,7 @@ function httpAddNewLaunch(req, res) {
       error: 'Invalid date given to the request body',
     });
 
-  addNewLaunch(launch);
-  return res.status(201).json(launch);
+  return res.status(201).json(addNewLaunch(launch));
 }
 
 module.exports = {
