@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "start": "npm start --prefix server",
-    "dev": "set PORT=5000&& npm run dev --prefix server",
-    "deploy": "set BUILD_PATH=../server/public&& npm run build --prefix client && npm start --prefix server"
+    "dev": "PORT=5000 npm run dev --prefix server",
+    "deploy": "npm run build --prefix client && npm start --prefix server"
   },
   "keywords": [],
   "author": "",
