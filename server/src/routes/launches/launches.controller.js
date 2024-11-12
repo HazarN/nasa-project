@@ -29,9 +29,8 @@ function httpAddNewLaunch(req, res) {
 
 function httpAbortLaunch(req, res) {
   const id = Number(req.params.id);
-  const aborted = abortLaunchById(id);
 
-  if (existLaunchWitId(id)) return res.status(200).json(aborted);
+  if (existLaunchWitId(id)) return res.status(200).json(abortLaunchById(id));
   else return res.status(404).json({ error: 'Launch not found, wrong id' });
 }
 
