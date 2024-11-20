@@ -1,15 +1,15 @@
 const {
   getAllLaunches,
-  addNewLaunch,
+  scheduleNewLaunch,
   existLaunchWitId,
   abortLaunchById,
 } = require('../../models/launches.model');
 
-function httpGetAllLaunches(_, res) {
-  return res.status(200).json(getAllLaunches());
+async function httpGetAllLaunches(_, res) {
+  return res.status(200).json(await getAllLaunches());
 }
 
-function httpAddNewLaunch(req, res) {
+async function httpAddNewLaunch(req, res) {
   const launch = req.body;
 
   if (!launch.mission || !launch.rocket || !launch.target || !launch.launchDate)
@@ -24,13 +24,15 @@ function httpAddNewLaunch(req, res) {
       error: 'Invalid date given to the request body',
     });
 
-  return res.status(201).json(addNewLaunch(launch));
+  await scheduleNewLaunch(launch);
+  return res.status(201).json(launch);
 }
 
-function httpAbortLaunch(req, res) {
+async function httpAbortLaunch(req, res) {
   const id = Number(req.params.id);
 
-  if (existLaunchWitId(id)) return res.status(200).json(abortLaunchById(id));
+  if (await existLaunchWitId(id))
+    return res.status(200).json(await abortLaunchById(id));
   else return res.status(404).json({ error: 'Launch not found, wrong id' });
 }
 

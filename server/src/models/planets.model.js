@@ -3,6 +3,8 @@ const parser = require('csv-parse');
 const path = require('path');
 
 const habitablePlanets = new Array();
+const planets = require('./planets.mongo');
+
 const filename = path.join(
   __dirname,
   '..',
@@ -30,27 +32,48 @@ function loadPlanets() {
           columns: true,
         })
       )
-      .on('data', (data) => {
-        if (isHabitablePlanet(data)) habitablePlanets.push(data);
+      .on('data', async (data) => {
+        if (isHabitablePlanet(data)) {
+          await savePlanet(data);
+        }
       })
       .on('error', (err) => {
         console.log(err);
         reject(err);
       })
-      .on('end', () => {
+      .on('end', async () => {
+        const planetsLength = (await getAllPlanets()).length;
+
         console.log(
           `\nThe "${filename.split('\\').at(-1)}" is parsed succesfully.`
         );
 
-        console.log(`There are ${habitablePlanets.length} habitable planets.`);
+        console.log(`There are ${planetsLength} habitable planets.`);
 
-        habitablePlanets.map((planet) => planet['kepler_name']);
         resolve();
       });
   });
 }
 
-const getAllPlanets = () => habitablePlanets;
+async function savePlanet(planet) {
+  try {
+    await planets.updateOne(
+      {
+        keplerName: planet.kepler_name,
+      },
+      {
+        keplerName: planet.kepler_name,
+      },
+      {
+        upsert: true, // insert if it's not exists
+      }
+    );
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const getAllPlanets = async () => await planets.find({}, { _id: 0, __v: 0 });
 
 module.exports = {
   loadPlanets,
