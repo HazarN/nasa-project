@@ -125,18 +125,6 @@ Required environment variables:
 - DB_PASSWORD: MongoDB Atlas password
 - MONGO_URL: MongoDB connection string (optional)
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
-
-## License
-
-ISC
-
 ## Acknowledgments
 
 - Frontend provided by [ZeroToMastery](https://zerotomastery.io/)
